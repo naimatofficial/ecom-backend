@@ -39,11 +39,24 @@ const productSchema = new mongoose.Schema(
             ref: 'Brand',
             required: [true, 'Please provide Brand'],
         },
+        brand: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Brand',
+            required: [true, 'Please provide Brand'],
+        },
         productType: {
             type: String,
             required: [true, 'Please provide Product type'],
             enum: ['physical', 'digital'],
             default: 'physical',
+        },
+        region: {
+            type: String,
+            // required: [true, 'Please provide Product type'],
+        },
+        subDepartment: {
+            type: String,
+            // required: [true, 'Please provide Product type'],
         },
         digitalProductType: {
             type: String,

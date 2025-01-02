@@ -21,6 +21,8 @@ import ShippingInfo from '../../models/sellers/shippingInfoModel.js'
 export const createProduct = catchAsync(async (req, res, next) => {
     let {
         name,
+        subDepartment,
+        region,
         description,
         category,
         subCategory,
@@ -72,6 +74,8 @@ export const createProduct = catchAsync(async (req, res, next) => {
 
     let productData = {
         name,
+        subDepartment,
+        region,
         description,
         category,
         subCategory,
