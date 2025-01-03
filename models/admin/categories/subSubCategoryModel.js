@@ -24,6 +24,7 @@ const subSubCategorySchema = new mongoose.Schema(
             required: [true, 'Please provide sub category.'],
             ref: 'SubCategory',
         },
+        logo: String,
         priority: Number,
         slug: {
             type: String,

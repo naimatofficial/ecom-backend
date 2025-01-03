@@ -17,6 +17,7 @@ const subCategorySchema = new mongoose.Schema(
             ref: 'Category',
         },
         priority: Number,
+        logo: String,
         slug: {
             type: String,
         },

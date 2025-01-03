@@ -48,7 +48,10 @@ const productSchema = new mongoose.Schema(
             type: String,
             required: [true, 'Please provide Product type'],
         },
-        region: {
+        digitalProductType: {
+            type: String,
+        },
+        regions: {
             type: String,
             // required: [true, 'Please provide Product type'],
         },
@@ -56,11 +59,6 @@ const productSchema = new mongoose.Schema(
             type: String,
             // required: [true, 'Please provide Product type'],
         },
-        // digitalProductType: {
-        //     type: String,
-        //     enum: ['readyAfterSell', 'readyProduct'],
-        //     default: 'readyAfterSell',
-        // },
         sku: {
             type: String,
             required: [true, 'Please provide SKU'],
@@ -148,7 +146,7 @@ const productSchema = new mongoose.Schema(
         },
         userType: {
             type: String,
-            enum: ['vendor', 'in-house'],
+            // enum: ['vendor', 'in-house'],
             required: [true, 'Please provide user type'],
         },
         slug: String,
@@ -207,6 +205,26 @@ productSchema.pre('save', async function (next) {
     } catch (error) {
         return next(error)
     }
+})
+
+productSchema.pre(/^find/, function (next) {
+    this.populate({
+        path: 'category',
+        select: 'name slug',
+    })
+        .populate({
+            path: 'brand',
+            select: 'name slug',
+        })
+        .populate({
+            path: 'subCategory',
+            select: 'name',
+        })
+        .populate({
+            path: 'subSubCategory',
+            select: 'name',
+        })
+    next()
 })
 
 const Product = DbConnection.model('Product', productSchema)
