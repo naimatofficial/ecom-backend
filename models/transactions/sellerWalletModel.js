@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { transactionDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 
 const sellerWalletSchema = new mongoose.Schema(
     {
@@ -41,9 +41,6 @@ const sellerWalletSchema = new mongoose.Schema(
     { timestamps: true }
 )
 
-const SellerWallet = transactionDbConnection.model(
-    'SellerWallet',
-    sellerWalletSchema
-)
+const SellerWallet = DbConnection.model('SellerWallet', sellerWalletSchema)
 
 export default SellerWallet

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { adminDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 
 const attributeSchema = new mongoose.Schema(
     {
@@ -16,6 +16,6 @@ const attributeSchema = new mongoose.Schema(
 )
 
 // Create the model and associate it with the AdminDB connection
-const Attribute = adminDbConnection.model('Attribute', attributeSchema)
+const Attribute = DbConnection.model('Attribute', attributeSchema)
 
 export default Attribute

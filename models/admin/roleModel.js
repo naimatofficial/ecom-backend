@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { adminDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 
 const roleSchema = new mongoose.Schema({
     name: {
@@ -14,6 +14,6 @@ const roleSchema = new mongoose.Schema({
     ],
 })
 
-const Role = adminDbConnection.model('Role', roleSchema)
+const Role = DbConnection.model('Role', roleSchema)
 
 export default Role

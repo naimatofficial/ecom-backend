@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { adminDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 
 const brandSchema = new mongoose.Schema(
     {
@@ -41,6 +41,6 @@ brandSchema.virtual('productCount', {
     foreignField: 'brand',
 })
 
-const Brand = adminDbConnection.model('Brand', brandSchema)
+const Brand = DbConnection.model('Brand', brandSchema)
 
 export default Brand

@@ -3,7 +3,7 @@ import * as crypto from 'crypto'
 import validator from 'validator'
 import bcrypt from 'bcryptjs'
 
-import { userDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 
 const addressSchema = new mongoose.Schema({
     name: {
@@ -149,6 +149,6 @@ customerSchema.pre('save', function (next) {
     next()
 })
 
-const Customer = userDbConnection.model('Customer', customerSchema)
+const Customer = DbConnection.model('Customer', customerSchema)
 
 export default Customer

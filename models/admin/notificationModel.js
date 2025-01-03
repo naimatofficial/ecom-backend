@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { adminDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 
 const notificationSchema = new mongoose.Schema(
     {
@@ -29,6 +29,6 @@ const notificationSchema = new mongoose.Schema(
     }
 )
 
-const Notification = adminDbConnection.model('Notification', notificationSchema)
+const Notification = DbConnection.model('Notification', notificationSchema)
 
 export default Notification

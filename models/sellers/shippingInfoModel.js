@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 // import Vendor from './vendorModel.js'
 // import { checkReferenceId } from '../../utils/helpers.js'
-import { sellerDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 
 const shippingInfoSchema = new mongoose.Schema(
     {
@@ -35,9 +35,6 @@ const shippingInfoSchema = new mongoose.Schema(
 //     next()
 // })
 
-const ShippingInfo = sellerDbConnection.model(
-    'ShippingInfo',
-    shippingInfoSchema
-)
+const ShippingInfo = DbConnection.model('ShippingInfo', shippingInfoSchema)
 
 export default ShippingInfo

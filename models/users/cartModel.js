@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import Customer from './customerModel.js'
 
-import { userDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 import { checkReferenceId } from '../../utils/helpers.js'
 
 const cartSchema = new mongoose.Schema(
@@ -114,6 +114,6 @@ cartSchema.pre('save', async function (next) {
     }
 })
 
-const Cart = userDbConnection.model('Cart', cartSchema)
+const Cart = DbConnection.model('Cart', cartSchema)
 
 export default Cart

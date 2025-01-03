@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import validator from 'validator'
 import bcrypt from 'bcryptjs'
-import { adminDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 
 const userSchema = new mongoose.Schema(
     {
@@ -90,6 +90,6 @@ userSchema.methods.createPasswordResetToken = function () {
     return resetToken
 }
 
-const User = adminDbConnection.model('User', userSchema)
+const User = DbConnection.model('User', userSchema)
 
 export default User

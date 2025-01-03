@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { adminDbConnection } from '../../../config/dbConnections.js'
+import { DbConnection } from '../../../config/dbConnections.js'
 
 const pageSchema = new mongoose.Schema(
     {
@@ -24,6 +24,6 @@ const pageSchema = new mongoose.Schema(
 )
 
 // Create the model and associate it with the AdminDB connection
-const Page = adminDbConnection.model('Page', pageSchema)
+const Page = DbConnection.model('Page', pageSchema)
 
 export default Page

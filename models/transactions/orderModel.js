@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { transactionDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 import AppError from '../../utils/appError.js'
 import Product from '../sellers/productModel.js'
 import Vendor from '../sellers/vendorModel.js'
@@ -154,6 +154,6 @@ orderSchema.pre('save', async function (next) {
     }
 })
 
-const Order = transactionDbConnection.model('Order', orderSchema)
+const Order = DbConnection.model('Order', orderSchema)
 
 export default Order

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import { checkReferenceId } from '../../utils/helpers.js'
-import { sellerDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 import Vendor from './vendorModel.js'
 
 const vendorBankSchema = new mongoose.Schema(
@@ -46,6 +46,6 @@ vendorBankSchema.pre('save', async function (next) {
 })
 
 // Export the model
-const VendorBank = sellerDbConnection.model('VendorBank', vendorBankSchema)
+const VendorBank = DbConnection.model('VendorBank', vendorBankSchema)
 
 export default VendorBank

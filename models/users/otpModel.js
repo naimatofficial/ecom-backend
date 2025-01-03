@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { userDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 
 const otpSchema = new mongoose.Schema({
     email: {
@@ -19,6 +19,6 @@ const otpSchema = new mongoose.Schema({
     },
 })
 
-const OTP = userDbConnection.model('OTP', otpSchema)
+const OTP = DbConnection.model('OTP', otpSchema)
 
 export default OTP

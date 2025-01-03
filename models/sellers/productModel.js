@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { sellerDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 
 import Brand from '../admin/brandModel.js'
 import Category from '../admin/categories/categoryModel.js'
@@ -47,8 +47,6 @@ const productSchema = new mongoose.Schema(
         productType: {
             type: String,
             required: [true, 'Please provide Product type'],
-            enum: ['physical', 'digital'],
-            default: 'physical',
         },
         region: {
             type: String,
@@ -58,11 +56,11 @@ const productSchema = new mongoose.Schema(
             type: String,
             // required: [true, 'Please provide Product type'],
         },
-        digitalProductType: {
-            type: String,
-            enum: ['readyAfterSell', 'readyProduct'],
-            default: 'readyAfterSell',
-        },
+        // digitalProductType: {
+        //     type: String,
+        //     enum: ['readyAfterSell', 'readyProduct'],
+        //     default: 'readyAfterSell',
+        // },
         sku: {
             type: String,
             required: [true, 'Please provide SKU'],
@@ -211,7 +209,7 @@ productSchema.pre('save', async function (next) {
     }
 })
 
-const Product = sellerDbConnection.model('Product', productSchema)
+const Product = DbConnection.model('Product', productSchema)
 
 // // Sync indexes
 // Product.syncIndexes()

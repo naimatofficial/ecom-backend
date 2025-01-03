@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { adminDbConnection } from '../../../config/dbConnections.js'
+import { DbConnection } from '../../../config/dbConnections.js'
 
 const dealOfTheDaySchema = new mongoose.Schema(
     {
@@ -23,6 +23,6 @@ const dealOfTheDaySchema = new mongoose.Schema(
         timestamps: true,
     }
 )
-const DealOfTheDay = adminDbConnection.model('DealOfTheDay', dealOfTheDaySchema)
+const DealOfTheDay = DbConnection.model('DealOfTheDay', dealOfTheDaySchema)
 
 export default DealOfTheDay

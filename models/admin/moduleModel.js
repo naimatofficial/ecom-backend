@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { adminDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 
 const moduleSchema = new mongoose.Schema(
     {
@@ -18,6 +18,6 @@ const moduleSchema = new mongoose.Schema(
     }
 )
 
-const Module = adminDbConnection.model('Module', moduleSchema)
+const Module = DbConnection.model('Module', moduleSchema)
 
 export default Module

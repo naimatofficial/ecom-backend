@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import AppError from '../../utils/appError.js'
-import { adminDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 import Vendor from './vendorModel.js'
 import Customer from '../users/customerModel.js'
 
@@ -149,5 +149,5 @@ couponSchema.pre('save', async function (next) {
 })
 
 // Create and export the Coupon model
-const Coupon = adminDbConnection.model('Coupon', couponSchema)
+const Coupon = DbConnection.model('Coupon', couponSchema)
 export default Coupon

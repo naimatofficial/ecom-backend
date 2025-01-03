@@ -3,7 +3,7 @@ import * as crypto from 'crypto'
 import mongoose from 'mongoose'
 import validator from 'validator'
 import slugify from 'slugify'
-import { sellerDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 
 const vendorSchema = new mongoose.Schema(
     {
@@ -199,6 +199,6 @@ vendorSchema.pre('save', function (next) {
     next()
 })
 
-const Vendor = sellerDbConnection.model('Vendor', vendorSchema)
+const Vendor = DbConnection.model('Vendor', vendorSchema)
 
 export default Vendor

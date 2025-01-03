@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { adminDbConnection } from '../../../config/dbConnections.js'
+import { DbConnection } from '../../../config/dbConnections.js'
 
 const sellerSchema = new mongoose.Schema(
     {
@@ -41,7 +41,7 @@ const sellerSchema = new mongoose.Schema(
     }
 )
 
-// Create the model using adminDbConnection
-const SellerBusiness = adminDbConnection.model('SellerBusiness', sellerSchema)
+// Create the model using DbConnection
+const SellerBusiness = DbConnection.model('SellerBusiness', sellerSchema)
 
 export default SellerBusiness

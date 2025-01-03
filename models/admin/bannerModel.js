@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { adminDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 
 import Product from './../sellers/productModel.js'
 import Category from './categories/categoryModel.js'
@@ -69,6 +69,6 @@ bannerSchema.pre(/^find/, function (next) {
     next()
 })
 
-const Banner = adminDbConnection.model('Banner', bannerSchema)
+const Banner = DbConnection.model('Banner', bannerSchema)
 
 export default Banner

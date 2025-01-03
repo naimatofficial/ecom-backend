@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import validator from 'validator'
 
-import { userDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 
 const subscriberSchema = new mongoose.Schema(
     {
@@ -22,6 +22,6 @@ const subscriberSchema = new mongoose.Schema(
     }
 )
 
-const Subscriber = userDbConnection.model('Subscriber', subscriberSchema)
+const Subscriber = DbConnection.model('Subscriber', subscriberSchema)
 
 export default Subscriber

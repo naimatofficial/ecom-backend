@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { adminDbConnection } from '../../../config/dbConnections.js'
+import { DbConnection } from '../../../config/dbConnections.js'
 
 const shippingMethodSchema = new mongoose.Schema(
     {
@@ -19,7 +19,7 @@ const shippingMethodSchema = new mongoose.Schema(
     { timestamps: true }
 )
 
-const ShippingMethod = adminDbConnection.model(
+const ShippingMethod = DbConnection.model(
     'ShippingMethod',
     shippingMethodSchema
 )

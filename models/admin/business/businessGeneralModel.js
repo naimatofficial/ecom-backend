@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { adminDbConnection } from '../../../config/dbConnections.js'
+import { DbConnection } from '../../../config/dbConnections.js'
 import validator from 'validator'
 
 const businessGeneralSchema = new mongoose.Schema(
@@ -142,7 +142,7 @@ const businessGeneralSchema = new mongoose.Schema(
 )
 
 // Export the model
-const BusinessGeneral = adminDbConnection.model(
+const BusinessGeneral = DbConnection.model(
     'BusinessGeneral',
     businessGeneralSchema
 )

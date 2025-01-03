@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose'
-import { userDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 import { checkReferenceId } from '../../utils/helpers.js'
 
 import Customer from './customerModel.js'
@@ -53,9 +53,6 @@ productReviewSchema.pre('save', async function (next) {
     next()
 })
 
-const ProductReview = userDbConnection.model(
-    'ProductReview',
-    productReviewSchema
-)
+const ProductReview = DbConnection.model('ProductReview', productReviewSchema)
 
 export default ProductReview

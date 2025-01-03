@@ -12,49 +12,17 @@ function createConnection(uri) {
         serverSelectionTimeoutMS: 10000, // Server selection timeout (5 seconds)
     })
 }
-// UserDB connection
-export const userDbConnection = createConnection(keys.userDbURI)
-userDbConnection.on('connected', () => console.log('UserDB connected'))
-userDbConnection.on('disconnected', () => console.log('UserDB disconnected'))
-userDbConnection.on('error', (err) =>
-    console.log('UserDB connection error:', err)
-)
+// DB connection
+export const DbConnection = createConnection(keys.dbURI)
 
-// AdminDB connection
-export const adminDbConnection = createConnection(keys.adminDbURI)
-adminDbConnection.on('connected', () => console.log('AdminDB connected'))
-adminDbConnection.on('disconnected', () => console.log('AdminDB disconnected'))
-adminDbConnection.on('error', (err) =>
-    console.log('AdminDB connection error:', err)
-)
-
-// TransactionDB connection
-export const transactionDbConnection = createConnection(keys.transcationDbURI)
-transactionDbConnection.on('connected', () =>
-    console.log('TransactionDB connected')
-)
-transactionDbConnection.on('disconnected', () =>
-    console.log('TransactionDB disconnected')
-)
-transactionDbConnection.on('error', (err) =>
-    console.log('TransactionDB connection error:', err)
-)
-
-// SellerDB connection
-export const sellerDbConnection = createConnection(keys.sellerDbURI)
-sellerDbConnection.on('connected', () => console.log('SellerDB connected'))
-sellerDbConnection.on('disconnected', () =>
-    console.log('SellerDB disconnected')
-)
-sellerDbConnection.on('error', (err) =>
-    console.log('SellerDB connection error:', err)
+DbConnection.on('connected', () => console.log('Databse connected'))
+DbConnection.on('disconnected', () => console.log('Database disconnected'))
+DbConnection.on('error', (err) =>
+    console.log('Database connection error:', err)
 )
 
 // Graceful shutdown
 process.on('SIGINT', async () => {
-    await userDbConnection.close()
-    await adminDbConnection.close()
-    await transactionDbConnection.close()
-    await sellerDbConnection.close()
+    await DbConnection.close()
     process.exit(0)
 })

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { transactionDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 
 const transactionSchema = new mongoose.Schema(
     {
@@ -93,8 +93,5 @@ const transactionSchema = new mongoose.Schema(
     }
 )
 
-const Transaction = transactionDbConnection.model(
-    'Transaction',
-    transactionSchema
-)
+const Transaction = DbConnection.model('Transaction', transactionSchema)
 export default Transaction

@@ -24,10 +24,10 @@ class Config {
         this.redisPassword = process.env.REDIS_PASSWORD
 
         // Databases
-        this.adminDbURI = process.env.ADMIN_DB_URI
-        this.sellerDbURI = process.env.SELLER_DB_URI
-        this.userDbURI = process.env.USER_DB_URI
-        this.transcationDbURI = process.env.TRANSACTION_DB_URI
+        this.dbURI = process.env.DB_URI
+        // this.sellerDbURI = process.env.SELLER_DB_URI
+        // this.userDbURI = process.env.USER_DB_URI
+        // this.transcationDbURI = process.env.TRANSACTION_DB_URI
 
         // S3 Bucket Keys
         this.AWSS3BucketName = process.env.AWS_S3_BUCKET_NAME

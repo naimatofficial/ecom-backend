@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { adminDbConnection } from '../../../config/dbConnections.js'
+import { DbConnection } from '../../../config/dbConnections.js'
 
 const socialMediaSchema = new mongoose.Schema(
     {
@@ -23,6 +23,6 @@ const socialMediaSchema = new mongoose.Schema(
     }
 )
 
-const SocialMedia = adminDbConnection.model('SocialMedia', socialMediaSchema)
+const SocialMedia = DbConnection.model('SocialMedia', socialMediaSchema)
 
 export default SocialMedia

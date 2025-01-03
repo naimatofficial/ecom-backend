@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { adminDbConnection } from '../../../config/dbConnections.js'
+import { DbConnection } from '../../../config/dbConnections.js'
 
 const faqSchema = new mongoose.Schema(
     {
@@ -24,6 +24,6 @@ const faqSchema = new mongoose.Schema(
 )
 
 // Create the model and associate it with the AdminDB connection
-const FAQ = adminDbConnection.model('FAQ', faqSchema)
+const FAQ = DbConnection.model('FAQ', faqSchema)
 
 export default FAQ

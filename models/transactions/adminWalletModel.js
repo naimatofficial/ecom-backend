@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { transactionDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 
 const adminWalletSchema = new mongoose.Schema(
     {
@@ -32,7 +32,7 @@ const adminWalletSchema = new mongoose.Schema(
     { timestamps: true }
 )
 
-const AdminWallet = transactionDbConnection.model(
+const AdminWallet = DbConnection.model(
     'AdminWallet',
     adminWalletSchema
 )

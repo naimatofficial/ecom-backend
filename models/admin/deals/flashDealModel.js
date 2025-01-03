@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import AppError from '../../../utils/appError.js'
-import { adminDbConnection } from '../../../config/dbConnections.js'
+import { DbConnection } from '../../../config/dbConnections.js'
 import Product from '../../sellers/productModel.js'
 
 const flashDealSchema = new mongoose.Schema(
@@ -80,6 +80,6 @@ flashDealSchema.pre('save', async function (next) {
     }
 })
 
-const FlashDeal = adminDbConnection.model('FlashDeal', flashDealSchema)
+const FlashDeal = DbConnection.model('FlashDeal', flashDealSchema)
 
 export default FlashDeal

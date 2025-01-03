@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import Customer from './customerModel.js'
 
-import { userDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 import Product from '../sellers/productModel.js'
 import AppError from './../../utils/appError.js'
 import { checkReferenceId } from '../../utils/helpers.js'
@@ -71,6 +71,6 @@ wishlistSchema.pre('save', async function (next) {
     }
 })
 
-const Wishlist = userDbConnection.model('Wishlist', wishlistSchema)
+const Wishlist = DbConnection.model('Wishlist', wishlistSchema)
 
 export default Wishlist

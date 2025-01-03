@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { adminDbConnection } from '../../../config/dbConnections.js'
+import { DbConnection } from '../../../config/dbConnections.js'
 
 const productSchema = new mongoose.Schema({
     reOrderLevel: {
@@ -27,10 +27,7 @@ const productSchema = new mongoose.Schema({
     },
 })
 
-// Create the model using adminDbConnection
-const ProductBusiness = adminDbConnection.model(
-    'ProductBusiness',
-    productSchema
-)
+// Create the model using DbConnection
+const ProductBusiness = DbConnection.model('ProductBusiness', productSchema)
 
 export default ProductBusiness

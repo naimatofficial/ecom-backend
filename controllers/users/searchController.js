@@ -18,17 +18,17 @@ export const advancedSearch = catchAsync(async (req, res, next) => {
 
     const searchRegex = new RegExp(query, 'i')
 
-    // Fetch active brands
-    const brands = await Brand.find({
-        name: searchRegex,
-        // status: 'active',
-    }).select('name logo status')
+    // // Fetch active brands
+    // const brands = await Brand.find({
+    //     name: searchRegex,
+    //     // status: 'active',
+    // }).select('name logo status')
 
-    // Fetch active categories
-    const categories = await Category.find({
-        name: searchRegex,
-        // status: 'active',
-    }).select('name status')
+    // // Fetch active categories
+    // const categories = await Category.find({
+    //     name: searchRegex,
+    //     // status: 'active',
+    // }).select('name status')
 
     // Fetch approved products
     const products = await Product.find({
@@ -40,8 +40,8 @@ export const advancedSearch = catchAsync(async (req, res, next) => {
         .select('name price stock status')
 
     const searchResults = {
-        brands,
-        categories,
+        // brands,
+        // categories,
         products,
     }
 
@@ -59,7 +59,132 @@ export const advancedSearch = catchAsync(async (req, res, next) => {
     })
 })
 
-export const searchAll = catchAsync(async (req, res, next) => {
+// export const searchAll = catchAsync(async (req, res, next) => {
+//     const { query, limit = 5, page = 1 } = req.query
+
+//     if (!query) {
+//         return res.status(400).json({
+//             status: 'fail',
+//             message: 'Search query is required',
+//         })
+//     }
+
+//     const offset = (page - 1) * limit
+//     const cacheKey = `cache:Search:${query}:${page}:${limit}`
+
+//     // Check Redis cache
+//     const cachedResults = await redisClient.get(cacheKey)
+//     if (cachedResults) {
+//         return res.status(200).json({
+//             ...JSON.parse(cachedResults),
+//             status: 'success',
+//             cached: true,
+//         })
+//     }
+
+//     try {
+//         // MongoDB Aggregation for search
+//         const results = await Promise.all([
+//             // Search products
+//             Product.aggregate([
+//                 {
+//                     $match: {
+//                         name: { $regex: query, $options: 'i' },
+//                     },
+//                 },
+//                 {
+//                     $lookup: {
+//                         from: 'categories', // Name of the `categories` collection
+//                         localField: 'category',
+//                         foreignField: '_id',
+//                         as: 'category',
+//                     },
+//                 },
+//                 {
+//                     $lookup: {
+//                         from: 'brands', // Name of the `brands` collection
+//                         localField: 'brand',
+//                         foreignField: '_id',
+//                         as: 'brand',
+//                     },
+//                 },
+//                 {
+//                     $project: {
+//                         name: 1,
+//                         description: 1,
+//                         slug: 1,
+//                         thumbnail: 1,
+//                         category: { $arrayElemAt: ['$category.name', 0] },
+//                         brand: { $arrayElemAt: ['$brand.name', 0] },
+//                     },
+//                 },
+//                 { $skip: offset },
+//                 { $limit: parseInt(limit, 10) },
+//             ]),
+
+//             // Search brands
+//             Brand.aggregate([
+//                 {
+//                     $match: {
+//                         name: { $regex: query, $options: 'i' },
+//                     },
+//                 },
+//                 {
+//                     $project: {
+//                         name: 1,
+//                         slug: 1,
+//                     },
+//                 },
+//                 { $skip: offset },
+//                 { $limit: parseInt(limit, 10) },
+//             ]),
+
+//             // Search categories
+//             Category.aggregate([
+//                 {
+//                     $match: {
+//                         name: { $regex: query, $options: 'i' },
+//                     },
+//                 },
+//                 {
+//                     $project: {
+//                         name: 1,
+//                         slug: 1,
+//                     },
+//                 },
+//                 { $skip: offset },
+//                 { $limit: parseInt(limit, 10) },
+//             ]),
+//         ])
+
+//         const [products, brands, categories] = results
+
+//         // Combine results
+//         const combinedResults = [
+//             ...products.map((product) => ({ type: 'product', ...product })),
+//             ...brands.map((brand) => ({ type: 'brand', ...brand })),
+//             ...categories.map((category) => ({
+//                 type: 'category',
+//                 ...category,
+//             })),
+//         ]
+
+//         const response = {
+//             status: 'success',
+//             cached: false,
+//             totalResults: combinedResults.length,
+//             results: combinedResults,
+//         }
+
+//         // Cache the response
+//         await redisClient.setEx(cacheKey, 3600, JSON.stringify(response))
+
+//         res.status(200).json(response)
+//     } catch (error) {
+//         return next(error) // Pass errors to your global error handler
+//     }
+// })
+export const searchProductSuggestions = catchAsync(async (req, res, next) => {
     const { query, limit = 5, page = 1 } = req.query
 
     if (!query) {
@@ -84,96 +209,47 @@ export const searchAll = catchAsync(async (req, res, next) => {
 
     try {
         // MongoDB Aggregation for search
-        const results = await Promise.all([
-            // Search products
-            Product.aggregate([
-                {
-                    $match: {
-                        name: { $regex: query, $options: 'i' },
-                    },
+        const results = await // Search products
+        Product.aggregate([
+            {
+                $match: {
+                    name: { $regex: query, $options: 'i' },
                 },
-                {
-                    $lookup: {
-                        from: 'categories', // Name of the `categories` collection
-                        localField: 'category',
-                        foreignField: '_id',
-                        as: 'category',
-                    },
+            },
+            {
+                $lookup: {
+                    from: 'categories', // Name of the `categories` collection
+                    localField: 'category',
+                    foreignField: '_id',
+                    as: 'category',
                 },
-                {
-                    $lookup: {
-                        from: 'brands', // Name of the `brands` collection
-                        localField: 'brand',
-                        foreignField: '_id',
-                        as: 'brand',
-                    },
+            },
+            {
+                $lookup: {
+                    from: 'brands', // Name of the `brands` collection
+                    localField: 'brand',
+                    foreignField: '_id',
+                    as: 'brand',
                 },
-                {
-                    $project: {
-                        name: 1,
-                        description: 1,
-                        slug: 1,
-                        thumbnail: 1,
-                        category: { $arrayElemAt: ['$category.name', 0] },
-                        brand: { $arrayElemAt: ['$brand.name', 0] },
-                    },
+            },
+            {
+                $project: {
+                    name: 1,
+                    description: 1,
+                    slug: 1,
+                    category: { $arrayElemAt: ['$category.name', 0] },
+                    brand: { $arrayElemAt: ['$brand.name', 0] },
                 },
-                { $skip: offset },
-                { $limit: parseInt(limit, 10) },
-            ]),
-
-            // Search brands
-            Brand.aggregate([
-                {
-                    $match: {
-                        name: { $regex: query, $options: 'i' },
-                    },
-                },
-                {
-                    $project: {
-                        name: 1,
-                        slug: 1,
-                    },
-                },
-                { $skip: offset },
-                { $limit: parseInt(limit, 10) },
-            ]),
-
-            // Search categories
-            Category.aggregate([
-                {
-                    $match: {
-                        name: { $regex: query, $options: 'i' },
-                    },
-                },
-                {
-                    $project: {
-                        name: 1,
-                        slug: 1,
-                    },
-                },
-                { $skip: offset },
-                { $limit: parseInt(limit, 10) },
-            ]),
+            },
+            { $skip: offset },
+            { $limit: parseInt(limit, 10) },
         ])
-
-        const [products, brands, categories] = results
-
-        // Combine results
-        const combinedResults = [
-            ...products.map((product) => ({ type: 'product', ...product })),
-            ...brands.map((brand) => ({ type: 'brand', ...brand })),
-            ...categories.map((category) => ({
-                type: 'category',
-                ...category,
-            })),
-        ]
 
         const response = {
             status: 'success',
             cached: false,
-            totalResults: combinedResults.length,
-            results: combinedResults,
+            totalResults: results.length,
+            results,
         }
 
         // Cache the response

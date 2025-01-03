@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { transactionDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 
 const withdrawSchema = new mongoose.Schema(
     {
@@ -56,6 +56,6 @@ const withdrawSchema = new mongoose.Schema(
     }
 )
 
-const Withdraw = transactionDbConnection.model('Withdraw', withdrawSchema)
+const Withdraw = DbConnection.model('Withdraw', withdrawSchema)
 
 export default Withdraw

@@ -3,7 +3,7 @@ import validator from 'validator'
 import bcrypt from 'bcryptjs'
 import * as crypto from 'crypto'
 
-import { adminDbConnection } from '../../config/dbConnections.js'
+import { DbConnection } from '../../config/dbConnections.js'
 
 const employeeSchema = new mongoose.Schema(
     {
@@ -114,6 +114,6 @@ employeeSchema.methods.createPasswordResetToken = function () {
     return resetToken
 }
 
-const Employee = adminDbConnection.model('employee', employeeSchema)
+const Employee = DbConnection.model('employee', employeeSchema)
 
 export default Employee

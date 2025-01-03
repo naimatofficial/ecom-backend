@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import AppError from '../../../utils/appError.js'
-import { adminDbConnection } from '../../../config/dbConnections.js'
+import { DbConnection } from '../../../config/dbConnections.js'
 import Product from '../../sellers/productModel.js'
 
 const featuredDealSchema = new mongoose.Schema(
@@ -63,6 +63,6 @@ featuredDealSchema.virtual('activeProducts').get(function () {
     return this.products.length
 })
 
-const FeaturedDeal = adminDbConnection.model('FeaturedDeal', featuredDealSchema)
+const FeaturedDeal = DbConnection.model('FeaturedDeal', featuredDealSchema)
 
 export default FeaturedDeal

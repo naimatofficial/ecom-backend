@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { adminDbConnection } from '../../../config/dbConnections.js'
+import { DbConnection } from '../../../config/dbConnections.js'
 
 import Category from './categoryModel.js'
 import SubCategory from './subCategoryModel.js'
@@ -54,7 +54,7 @@ subSubCategorySchema.pre('save', async function (next) {
     next()
 })
 
-const SubSubCategory = adminDbConnection.model(
+const SubSubCategory = DbConnection.model(
     'SubSubCategory',
     subSubCategorySchema
 )

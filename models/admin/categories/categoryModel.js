@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { adminDbConnection } from '../../../config/dbConnections.js'
+import { DbConnection } from '../../../config/dbConnections.js'
 
 const categorySchema = new mongoose.Schema(
     {
@@ -53,6 +53,6 @@ categorySchema.virtual('productCount', {
 //     foreignField: 'mainCategory',
 // })
 
-const Category = adminDbConnection.model('Category', categorySchema)
+const Category = DbConnection.model('Category', categorySchema)
 
 export default Category
