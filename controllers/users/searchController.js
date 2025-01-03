@@ -185,7 +185,7 @@ export const advancedSearch = catchAsync(async (req, res, next) => {
 //     }
 // })
 export const searchProductSuggestions = catchAsync(async (req, res, next) => {
-    const { query, limit = 5, page = 1 } = req.query
+    const { query, limit = 10, page = 1 } = req.query
 
     if (!query) {
         return res.status(400).json({
@@ -213,7 +213,10 @@ export const searchProductSuggestions = catchAsync(async (req, res, next) => {
         Product.aggregate([
             {
                 $match: {
-                    name: { $regex: query, $options: 'i' },
+                    $or: [
+                        { name: { $regex: query, $options: 'i' } },
+                        { description: { $regex: query, $options: 'i' } },
+                    ],
                 },
             },
             {
@@ -261,11 +264,25 @@ export const searchProductSuggestions = catchAsync(async (req, res, next) => {
     }
 })
 
-export const searchProducts = catchAsync(async (req, res) => {
-    const cacheKey = getCacheKey('cache:Search', '', req.query)
+export const searchProducts = catchAsync(async (req, res, next) => {
+    const { query = '', limit = 10, page = 1, sort = '-createdAt' } = req.query
 
-    // Check cache first
+    console.log(req.query)
+
+    if (!query) {
+        return res.status(400).json({
+            status: 'fail',
+            message: 'Search query is required',
+        })
+    }
+
+    const pageNum = Math.max(parseInt(page, 10) || 1, 1) // Ensure page is at least 1
+    const limitNum = Math.min(Math.max(parseInt(limit, 10) || 1, 1), 50) // Ensure limit is between 1 and 50
+    const offset = (pageNum - 1) * limitNum
+    const cacheKey = `cache:Search:${query}:${page}:${limit}:${sort}`
+
     try {
+        // Check Redis Cache
         const cachedResults = await redisClient.get(cacheKey)
         if (cachedResults) {
             return res.status(200).json({
@@ -278,68 +295,83 @@ export const searchProducts = catchAsync(async (req, res) => {
         console.error('Redis error:', err)
     }
 
-    // Extract query parameters with safe defaults
-    const {
-        query = '',
-        sort = '-createdAt', // Default sorting by most recent
-        limit = 10,
-        page = 1,
-        ...filters
-    } = req.query
-
-    // Sanitize page and limit parameters
-    const pageNum = Math.max(parseInt(page, 10) || 1, 1)
-    const limitNum = Math.min(Math.max(parseInt(limit, 10) || 1, 1), 50) // Ensure limit is between 1 and 50
-    const offset = (pageNum - 1) * limitNum
-
-    // Enhance search filters with regex for name and description
-    if (query) {
-        filters.$or = [
-            { name: { $regex: query, $options: 'i' } },
-            { description: { $regex: query, $options: 'i' } },
-        ]
-    }
-
     try {
-        // Base query
-        const baseQuery = Product.find(filters)
+        // MongoDB Aggregation for search
+        const pipeline = [
+            {
+                $match: {
+                    $or: [
+                        { name: { $regex: query, $options: 'i' } },
+                        { description: { $regex: query, $options: 'i' } },
+                    ],
+                },
+            },
+            {
+                $lookup: {
+                    from: 'categories', // Name of the `categories` collection
+                    localField: 'category',
+                    foreignField: '_id',
+                    as: 'category',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'brands', // Name of the `brands` collection
+                    localField: 'brand',
+                    foreignField: '_id',
+                    as: 'brand',
+                },
+            },
+            {
+                $addFields: {
+                    category: { $arrayElemAt: ['$category.name', 0] },
+                    brand: { $arrayElemAt: ['$brand.name', 0] },
+                },
+            },
+            {
+                $sort: {
+                    [sort.replace('-', '')]: sort.startsWith('-') ? -1 : 1,
+                },
+            },
+            { $skip: offset },
+            { $limit: limitNum },
+        ]
 
-        // Use APIFeatures for chaining methods
-        const features = new APIFeatures(baseQuery, req.query)
-            .filter()
-            .sort(sort)
-            .fieldsLimit()
+        // Count total documents without pagination
+        const countPipeline = [...pipeline]
+        countPipeline.splice(-2, 2) // Remove `$skip` and `$limit` stages
+        countPipeline.push({ $count: 'totalResults' })
 
-        // Count total matching documents
-        const totalProducts = await features.query.clone().countDocuments()
+        const [results, countResult] = await Promise.all([
+            Product.aggregate(pipeline),
+            Product.aggregate(countPipeline),
+        ])
 
-        // Fetch products with pagination
-        features.paginate(offset, limitNum)
-        const products = await features.query
+        console.log({ results })
 
-        // Prepare response
+        const totalResults =
+            countResult.length > 0 ? countResult[0].totalResults : 0
+        const totalPages = Math.ceil(totalResults / limitNum)
+
         const response = {
             status: 'success',
             cached: false,
-            totalProducts,
-            totalPages: Math.ceil(totalProducts / limitNum),
+            totalResults,
+            totalPages,
             currentPage: pageNum,
-            doc: products,
+            results,
         }
 
-        // Cache response
+        // Cache the response
         try {
-            await redisClient.setEx(cacheKey, 3600, JSON.stringify(response))
+            await redisClient.setEx(cacheKey, 3600, JSON.stringify(response)) // Cache for 1 hour
         } catch (err) {
             console.error('Redis caching error:', err)
         }
 
         res.status(200).json(response)
     } catch (error) {
-        console.error('Search error:', error)
-        res.status(500).json({
-            status: 'error',
-            message: 'Internal server error',
-        })
+        console.error('Aggregation error:', error)
+        next(error) // Pass errors to the global error handler
     }
 })
