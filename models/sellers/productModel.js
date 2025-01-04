@@ -51,7 +51,7 @@ const productSchema = new mongoose.Schema(
         digitalProductType: {
             type: String,
         },
-        regions: {
+        region: {
             type: String,
             // required: [true, 'Please provide Product type'],
         },
