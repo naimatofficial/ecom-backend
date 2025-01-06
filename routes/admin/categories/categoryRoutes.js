@@ -16,6 +16,8 @@ import { protect, restrictTo } from './../../../middleware/authMiddleware.js'
 
 const router = express.Router()
 
+//skdjf
+
 router.route('/').post(protect, createCategory).get(getCategories)
 
 router
