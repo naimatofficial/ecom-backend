@@ -108,6 +108,8 @@ export const createProduct = catchAsync(async (req, res, next) => {
         slug: slugify(name, { lower: true }),
     }
 
+    console.log({ productData })
+
     const newProduct = new Product(productData)
 
     await newProduct.save()
