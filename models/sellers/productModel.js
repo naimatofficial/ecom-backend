@@ -63,6 +63,9 @@ const productSchema = new mongoose.Schema(
             type: String,
             required: [true, 'Please provide SKU'],
         },
+        HSCode: {
+            type: String,
+        },
         unit: {
             type: String,
             required: [true, 'Please provide Unit'],
