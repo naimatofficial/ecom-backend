@@ -27,7 +27,7 @@ export const generateOTP = () => {
 export const otpEmailSend = catchAsync(async (email, otp) => {
     const mailOptions = {
         email: email,
-        subject: 'Your Vistamar OTP Code',
+        subject: 'Your verification OTP Code',
         html: `
       <!DOCTYPE html>
       <html lang="en">
@@ -96,21 +96,21 @@ export const otpEmailSend = catchAsync(async (email, otp) => {
       <body>
         <div class="container">
           <div class="header">
-            <h1>Vista Mart OTP Verification</h1>
+            <h1>Uraan Pakistan OTP Verification</h1>
           </div>
           <div class="content">
             <p>Dear Customer,</p>
-            <p>Your One-Time Password (OTP) for Vista Mart is:</p>
+            <p>Your One-Time Password (OTP) for Uraan Pakistan is:</p>
             <div class="otp">${otp}</div>
             <p>This code is valid for the next <strong>2 minutes</strong>. Please do not share it with anyone.</p>
-            <p>Thank you for choosing Vista Mart!</p>
+            <p>Thank you for choosing Uraan Pakistan!</p>
           </div>
           <div class="footer">
             <p>Best Regards,</p>
-            <p>Vista Mart Team</p>
+            <p>Uraan Pakistan Team</p>
             <p>
-              <a href="https://vistamart.com" target="_blank">Visit Vistamart</a> |
-              <a href="mailto:support@vistamart.com">Contact Support</a>
+              <a href=${keys.userClientURL} target="_blank">Visit Uraan Pakistan</a> |
+              <a href="mailto:support@uraanpakistan.com">Contact Support</a>
             </p>
           </div>
         </div>
@@ -127,7 +127,7 @@ export const sendSMS = catchAsync(async (phone, otp) => {
     return client.messages.create({
         messagingServiceSid: keys.twilioAccountSID,
         to: phone,
-        body: `Dear Customer, your OTP code for Vistamart is: ${otp}. It is valid for 5 minutes.`,
+        body: `Dear Customer, your OTP code for Uraan Pakistan is: ${otp}. It is valid for 5 minutes.`,
     })
 })
 

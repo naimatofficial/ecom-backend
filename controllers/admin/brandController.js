@@ -1,16 +1,18 @@
-import slugify from 'slugify'
 import Brand from '../../models/admin/brandModel.js'
 import catchAsync from '../../utils/catchAsync.js'
-
-import { getCacheKey } from '../../utils/helpers.js'
-import redisClient from '../../config/redisConfig.js'
-import APIFeatures from '../../utils/apiFeatures.js'
-
-import { createOne, updateStatus } from '../../factory/handleFactory.js'
 import Product from '../../models/sellers/productModel.js'
 import Order from '../../models/transactions/orderModel.js'
 import AppError from '../../utils/appError.js'
+import { getCacheKey } from '../../utils/helpers.js'
+import redisClient from '../../config/redisConfig.js'
+import APIFeatures from '../../utils/apiFeatures.js'
 import { deleteKeysByPattern } from '../../services/redisService.js'
+
+import {
+    createOne,
+    updateStatus,
+    updateOne,
+} from '../../factory/handleFactory.js'
 
 // Create a new brand
 export const createBrand = createOne(Brand)
@@ -203,34 +205,7 @@ export const getBrandBySlug = catchAsync(async (req, res, next) => {
 })
 
 // Update a brand by ID
-export const updateBrand = catchAsync(async (req, res) => {
-    const { name, imageAltText, logo } = req.body
-
-    const doc = await Brand.findByIdAndUpdate(
-        req.params.id,
-        {
-            name,
-            logo,
-            imageAltText,
-            slug: slugify(filteredData.name, { lower: true }),
-        },
-        { new: true }
-    )
-
-    // Handle case where the document was not found
-    if (!doc) {
-        return next(new AppError('No document found with that ID', 404))
-    }
-
-    // Update cache
-    await deleteKeysByPattern('Brand')
-    await deleteKeysByPattern('Search')
-
-    res.status(200).json({
-        status: 'success',
-        doc,
-    })
-})
+export const updateBrand = updateOne(Brand)
 
 // Delete a brand by ID
 export const deleteBrand = catchAsync(async (req, res, next) => {

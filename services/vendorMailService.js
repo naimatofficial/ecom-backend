@@ -84,17 +84,17 @@ export const sendVendorApprovedEmail = catchAsync(async (email, vendor) => {
                 </div>
                 <div class="content">
                     <p>Dear ${vendor.firstName},</p>
-                    <p>Congratulations! We are delighted to inform you that your shop is now live on Vista Mart.</p>
+                    <p>Congratulations! We are delighted to inform you that your shop is now live on Uraan Pakistan.</p>
                     <p>Start showcasing your products and reach thousands of customers waiting to shop with you.</p>
                     <a href="https://seller.vistamart.biz" target="_blank" class="cta">Access Your Dashboard</a>
-                    <p>Thank you for choosing Vista Mart. We are excited to partner with you and help grow your business!</p>
+                    <p>Thank you for choosing Uraan Pakistan. We are excited to partner with you and help grow your business!</p>
                 </div>
                 <div class="footer">
                     <p>Best Regards,</p>
-                    <p>Vista Mart Team</p>
+                    <p>Uraan Pakistan Team</p>
                     <p>
-                        <a href="https://vistamart.biz" target="_blank">Visit Vista Mart</a> |
-                        <a href="mailto:support@vistamart.com">Contact Support</a>
+                        <a href="https://ecom.lighthouseclouds.com" target="_blank">Visit Uraan Pakistan</a> |
+                        <a href="mailto:support@uraanpakistan.com">Contact Support</a>
                     </p>
                 </div>
             </div>

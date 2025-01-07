@@ -24,7 +24,7 @@ import { emailTransporter } from '../utils/helpers.js'
 const sendEmail = catchAsync(async (options) => {
     // Define the email options
     const mailOptions = {
-        from: `Vista Mart <${keys.emailAddress}>`,
+        from: `URAAN PAKISTAN <${keys.emailAddress}>`,
         to: options.email,
         subject: options.subject,
         html: options.html,

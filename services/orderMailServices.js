@@ -1,5 +1,6 @@
 import catchAsync from '../utils/catchAsync.js'
 import sendEmail from './emailService.js'
+import keys from './../config/keys.js'
 
 export const sendOrderEmailToCustomer = catchAsync(
     async (customer, orderId) => {
@@ -90,12 +91,12 @@ export const sendOrderEmailToCustomer = catchAsync(
                         <p>Hello ${customer.firstName},</p>
                         <p>Thank you for your order! Your order ID is <span class="order-id">${orderId}</span>.</p>
                         <p>We’ll keep you updated on the status of your order soon.</p>
-                        <p>Thank you for choosing Vista Mart. We appreciate your business!</p>
+                        <p>Thank you for choosing Uraan Pakistan. We appreciate your business!</p>
                     </div>
                     <div class="footer">
-                        <p>If you have any questions, feel free to <a href="mailto:support@vistamart.biz">contact us</a>.</p>
+                        <p>If you have any questions, feel free to <a href="mailto:support@uraanpakistan.com">contact us</a>.</p>
                         <p>Best Regards,</p>
-                        <p>Vista Mart Team</p>
+                        <p>Uraan Pakistan Team</p>
                     </div>
                 </div>
             </body>
@@ -198,14 +199,14 @@ export const sendOrderEmailToVendor = catchAsync(
                         <p>You have received a new order from <strong>${customer.firstName}</strong>.</p>
                         <p>Order ID: <span class="order-id">${orderId}</span></p>
                         <div class="action">
-                            <a href="https://seller.vistamart.biz/pendingorders" class="cta">Go to Orders</a>
+                            <a href=${keys.sellerClientURL} class="cta">Go to Orders</a>
                         </div>
                         <p>Thank you for your attention!</p>
                     </div>
                     <div class="footer">
                         <p>If you have any questions, feel free to <a href="mailto:support@vistamart.biz">contact us</a>.</p>
                         <p>Best Regards,</p>
-                        <p>Vista Mart Team</p>
+                        <p>Uraan Pakistan Team</p>
                     </div>
                 </div>
             </body>
