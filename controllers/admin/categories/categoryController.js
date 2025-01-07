@@ -2,6 +2,7 @@ import Category from '../../../models/admin/categories/categoryModel.js'
 import slugify from 'slugify'
 import {
     createOne,
+    getAll,
     updateOne,
     updateStatus,
 } from '../../../factory/handleFactory.js'
@@ -21,77 +22,91 @@ import { deleteKeysByPattern } from '../../../services/redisService.js'
 // Create a new category
 export const createCategory = createOne(Category)
 
-export const getCategories = catchAsync(async (req, res, next) => {
-    const cacheKey = getCacheKey('Category', '', req.query)
+// export const getCategories = catchAsync(async (req, res, next) => {
+//     const cacheKey = getCacheKey('Category', '', req.query)
 
-    // Check cache first
-    const cacheddoc = await redisClient.get(cacheKey)
+//     // Check cache first
+//     const cacheddoc = await redisClient.get(cacheKey)
 
-    if (cacheddoc !== null) {
-        return res.status(200).json({
-            status: 'success',
-            cached: true,
-            results: JSON.parse(cacheddoc).length,
-            doc: JSON.parse(cacheddoc),
-        })
-    }
+//     if (cacheddoc !== null) {
+//         return res.status(200).json({
+//             status: 'success',
+//             cached: true,
+//             results: JSON.parse(cacheddoc).length,
+//             doc: JSON.parse(cacheddoc),
+//         })
+//     }
 
-    // EXECUTE QUERY
-    let query = Category.find()
+//     // EXECUTE QUERY
+//     let query = Category.find()
 
-    // Apply filters, sorting, field limiting, and pagination
-    const features = new APIFeatures(query, req.query)
-        .filter()
-        .sort()
-        .fieldsLimit()
-        .paginate()
+//     // Apply filters, sorting, field limiting, and pagination
+//     const features = new APIFeatures(query, req.query)
+//         .filter()
+//         .sort()
+//         .fieldsLimit()
+//         .paginate()
 
-    // Fetch all categories
-    const categories = await features.query.lean()
+//     // Fetch all categories
+//     const categories = await features.query.lean()
 
-    // Fetch products and total orders for each category
-    const categoriesWithProductsAndOrders = await Promise.all(
-        categories.map(async (category) => {
-            // Step 1: Fetch all products for the category
-            const products = await Product.find({
-                category: category._id,
-                status: 'approved',
-            })
-                .select('_id')
-                .lean()
+//     // Fetch products and total orders for each category
+//     const categoriesWithProductsAndOrders = await Promise.all(
+//         categories.map(async (category) => {
+//             // Step 1: Fetch all products for the category
+//             const products = await Product.find({
+//                 category: category._id,
+//                 status: 'approved',
+//             })
+//                 .select('_id')
+//                 .lean()
 
-            const totalProducts = products?.length || 0
+//             const totalProducts = products?.length || 0
 
-            // Step 2: Extract product IDs
-            const productIds = products.map((product) => product._id)
+//             // Step 2: Extract product IDs
+//             const productIds = products.map((product) => product._id)
 
-            // Step 3: Count the total number of orders for these products
-            const totalOrders = await Order.countDocuments({
-                products: { $in: productIds }, // Match orders that contain any of the product IDs
-            }).lean()
+//             // Step 3: Count the total number of orders for these products
+//             const totalOrders = await Order.countDocuments({
+//                 products: { $in: productIds }, // Match orders that contain any of the product IDs
+//             }).lean()
 
-            // Step 4: Add products and totalOrders to the category object
-            return {
-                ...category,
-                totalOrders, // Total number of orders for these products
-                totalProducts,
-            }
-        })
-    )
+//             // Step 4: Add products and totalOrders to the category object
+//             return {
+//                 ...category,
+//                 totalOrders, // Total number of orders for these products
+//                 totalProducts,
+//             }
+//         })
+//     )
 
-    // Cache the result
-    await redisClient.setEx(
-        cacheKey,
-        3600,
-        JSON.stringify(categoriesWithProductsAndOrders)
-    )
+//     // Cache the result
+//     await redisClient.setEx(
+//         cacheKey,
+//         3600,
+//         JSON.stringify(categoriesWithProductsAndOrders)
+//     )
 
-    res.status(200).json({
-        status: 'success',
-        cached: false,
-        results: categoriesWithProductsAndOrders.length,
-        doc: categoriesWithProductsAndOrders,
-    })
+//     res.status(200).json({
+//         status: 'success',
+//         cached: false,
+//         results: categoriesWithProductsAndOrders.length,
+//         doc: categoriesWithProductsAndOrders,
+//     })
+// })
+
+export const getCategories = getAll(Category, {
+    path: [
+        'productCount',
+        {
+            path: 'subCategories',
+            select: '_id name slug',
+        },
+        {
+            path: 'subSubCategories',
+            select: '_id name slug',
+        },
+    ],
 })
 
 export const getCategoryById = catchAsync(async (req, res, next) => {
