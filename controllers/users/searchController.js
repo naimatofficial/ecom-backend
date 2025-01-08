@@ -215,6 +215,7 @@ export const searchProductSuggestions = catchAsync(async (req, res, next) => {
                 $match: {
                     $or: [
                         { name: { $regex: query, $options: 'i' } },
+                        { slug: { $regex: query, $options: 'i' } },
                         { description: { $regex: query, $options: 'i' } },
                     ],
                 },
@@ -267,8 +268,6 @@ export const searchProductSuggestions = catchAsync(async (req, res, next) => {
 export const searchProducts = catchAsync(async (req, res, next) => {
     const { query = '', limit = 10, page = 1, sort = '-createdAt' } = req.query
 
-    console.log(req.query)
-
     if (!query) {
         return res.status(400).json({
             status: 'fail',
@@ -302,6 +301,7 @@ export const searchProducts = catchAsync(async (req, res, next) => {
                 $match: {
                     $or: [
                         { name: { $regex: query, $options: 'i' } },
+                        { slug: { $regex: query, $options: 'i' } },
                         { description: { $regex: query, $options: 'i' } },
                     ],
                 },

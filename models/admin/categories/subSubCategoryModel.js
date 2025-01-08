@@ -42,7 +42,7 @@ subSubCategorySchema.index({ name: 'text' })
 subSubCategorySchema.pre(/^find/, function (next) {
     this.populate({
         path: 'mainCategory subCategory',
-        select: 'name',
+        select: 'name slug logo',
     })
     next()
 })

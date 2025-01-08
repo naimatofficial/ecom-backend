@@ -182,6 +182,7 @@ const productSchema = new mongoose.Schema(
 )
 
 productSchema.index({ name: 'text', description: 'text' }) // Text search
+productSchema.index({ slug: 'text' }) // Text search
 productSchema.index({ category: 1, subCategory: 1 }) // Category hierarchy
 productSchema.index({ price: 1 }) // Sorting by price
 productSchema.index({ isFeatured: 1, rating: -1 }) // Featured products sorted by rating
