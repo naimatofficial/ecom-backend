@@ -17,12 +17,7 @@ const router = express.Router()
 
 router
     .route('/')
-    .post(
-        protect,
-
-        validateSchema(subSubCategoryValidationSchema),
-        createSubSubCategory
-    )
+    .post(protect, createSubSubCategory)
     .get(getAllSubSubCategories)
 
 router

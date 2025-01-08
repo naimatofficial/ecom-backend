@@ -13,15 +13,7 @@ import { protect, restrictTo } from './../../../middleware/authMiddleware.js'
 
 const router = express.Router()
 
-router
-    .route('/')
-    .post(
-        protect,
-
-        validateSchema(subCategoryValidationSchema),
-        createSubCategory
-    )
-    .get(getAllSubCategories)
+router.route('/').post(protect, createSubCategory).get(getAllSubCategories)
 
 router
     .route('/:id')

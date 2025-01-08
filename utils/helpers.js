@@ -31,8 +31,6 @@ export const emailTransporter = nodemailer.createTransport({
 export const checkReferenceId = async (Model, foreignKey, next) => {
     const referenceKey = await Model.findById(foreignKey)
 
-    console.log({ foreignKey, referenceKey })
-
     if (!referenceKey) {
         const docName = Model?.modelName?.toLowerCase() || 'Document'
 
