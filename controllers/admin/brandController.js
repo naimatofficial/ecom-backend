@@ -114,7 +114,7 @@ export const getBrandById = catchAsync(async (req, res, next) => {
 
     // Step 1: Fetch total products for the brand
     const products = await Product.find({
-        brand: brand._id,
+        brand: doc._id,
         status: 'approved',
     })
         .select('_id')
