@@ -53,7 +53,7 @@ if (process.env.NODE_ENV === 'development') {
 app.get('/', (req, res) => {
     res.status(200).json({
         status: 'success',
-        message: '🛒 Vista Mart API is running successfully',
+        message: '🛒 API is running successfully',
         timestamp: new Date().toISOString(),
         version: '1.0.0',
     })
