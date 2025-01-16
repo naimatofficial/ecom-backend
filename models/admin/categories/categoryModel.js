@@ -54,19 +54,6 @@ categorySchema.virtual('subSubCategories', {
     foreignField: 'mainCategory',
 })
 
-// Virtual field to populate subcategories and sub-subcategories
-// categorySchema.virtual('subCategories', {
-//     ref: 'SubCategory',
-//     localField: '_id',
-//     foreignField: 'mainCategory',
-// })
-
-// categorySchema.virtual('subSubCategories', {
-//     ref: 'SubSubCategory',
-//     localField: '_id',
-//     foreignField: 'mainCategory',
-// })
-
 const Category = DbConnection.model('Category', categorySchema)
 
 export default Category

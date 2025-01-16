@@ -8,7 +8,6 @@ import transactionRoutes from './transactions/index.js'
 import sellerRoutes from './sellers/index.js'
 
 import { validateSessionToken } from '../middleware/authMiddleware.js'
-import { searchProducts } from '../controllers/sellers/productController.js'
 import { httpSearchProducts } from '../controllers/search.js'
 
 const router = express.Router()

@@ -7,6 +7,7 @@ import { getCacheKey } from '../utils/helpers.js'
 import mongoose from 'mongoose'
 import { deleteKeysByPattern } from '../services/redisService.js'
 import Vendor from '../models/sellers/vendorModel.js'
+import { getCacheData, setCacheData } from '../utils/cacheCompressed.js'
 
 // Check Document fields if they exisit it return data body
 // And if not it return Error
@@ -120,6 +121,8 @@ export const createOne = (Model) =>
             }
         }
 
+        console.log({ filteredData })
+
         const doc = await Model.create(filteredData)
 
         const docName = Model.modelName || 'Document'
@@ -184,32 +187,102 @@ export const getOne = (Model, popOptions) =>
         })
     })
 
+// export const getAll = (Model, popOptions) =>
+//     catchAsync(async (req, res, next) => {
+//         const cacheKey = getCacheKey(Model.modelName, '', req.query)
+
+//         // Check cache first
+//         const cachedResults = await redisClient.get(cacheKey)
+//         if (cachedResults) {
+//             return res.status(200).json({
+//                 ...JSON.parse(cachedResults),
+//                 status: 'success',
+//                 cached: true,
+//             })
+//         }
+
+//         // Base query
+//         let query = Model.find()
+
+//         // Conditionally apply population
+//         if (popOptions?.path) {
+//             if (Array.isArray(popOptions.path)) {
+//                 popOptions.path.forEach((pathOption) => {
+//                     query = query.populate(pathOption)
+//                 })
+//             } else {
+//                 query = query.populate(popOptions)
+//             }
+//         }
+
+//         const { sort, limit, page = 1, ...filters } = req.query
+//         const hasQueryOptions =
+//             sort || limit || page || Object.keys(filters).length > 0
+
+//         let doc, totalDocs
+
+//         if (hasQueryOptions) {
+//             // Step 1: Apply filters and count total documents
+//             const features = new APIFeatures(query, req.query)
+//                 .filter()
+//                 .sort()
+//                 .fieldsLimit()
+//             totalDocs = await features.query.clone().countDocuments()
+
+//             // Step 2: Apply pagination and fetch data
+//             features.paginate()
+//             doc = await features.query
+//         } else {
+//             // Fetch all documents if no query options are applied
+//             doc = await Model.find().lean()
+//             totalDocs = doc.length
+//         }
+
+//         // Calculate pagination details
+//         const currentPage = Number(page)
+//         const limitNum = Number(limit)
+//         const totalPages = limitNum ? Math.ceil(totalDocs / limitNum) : 1
+
+//         const response = {
+//             status: 'success',
+//             cached: false,
+//             totalDocs, // Total count of documents
+//             results: doc.length, // Number of documents in the current page
+//             currentPage, // Current page number
+//             totalPages, // Total number of pages
+//             doc,
+//         }
+
+//         // Cache the result if not in cache
+//         await redisClient.setEx(cacheKey, 3600, JSON.stringify(response))
+
+//         res.status(200).send(response)
+//     })
+
 export const getAll = (Model, popOptions) =>
     catchAsync(async (req, res, next) => {
         const cacheKey = getCacheKey(Model.modelName, '', req.query)
 
         // Check cache first
-        const cachedResults = await redisClient.get(cacheKey)
+        // const cachedResults = await redisClient.get(cacheKey)
+        const cachedResults = await getCacheData(cacheKey)
         if (cachedResults) {
             return res.status(200).json({
-                ...JSON.parse(cachedResults),
+                ...cachedResults,
                 status: 'success',
                 cached: true,
             })
         }
 
-        // Base query
-        let query = Model.find()
+        // Construct base query
+        let query = Model.find().lean()
 
         // Conditionally apply population
         if (popOptions?.path) {
-            if (Array.isArray(popOptions.path)) {
-                popOptions.path.forEach((pathOption) => {
-                    query = query.populate(pathOption)
-                })
-            } else {
-                query = query.populate(popOptions)
-            }
+            const populateOptions = Array.isArray(popOptions.path)
+                ? popOptions.path
+                : [popOptions.path]
+            query = query.populate(populateOptions)
         }
 
         const { sort, limit, page = 1, ...filters } = req.query
@@ -218,20 +291,22 @@ export const getAll = (Model, popOptions) =>
 
         let doc, totalDocs
 
+        // Handle query options (filters, sorting, pagination)
         if (hasQueryOptions) {
-            // Step 1: Apply filters and count total documents
             const features = new APIFeatures(query, req.query)
                 .filter()
                 .sort()
                 .fieldsLimit()
+
+            // Count documents with filters and sorting applied
             totalDocs = await features.query.clone().countDocuments()
 
-            // Step 2: Apply pagination and fetch data
+            // Apply pagination and fetch data
             features.paginate()
             doc = await features.query
         } else {
-            // Fetch all documents if no query options are applied
-            doc = await Model.find().lean()
+            // Fetch all documents if no query options
+            doc = await query
             totalDocs = doc.length
         }
 
@@ -244,14 +319,14 @@ export const getAll = (Model, popOptions) =>
             status: 'success',
             cached: false,
             totalDocs, // Total count of documents
-            results: doc.length, // Number of documents in the current page
+            results: doc.length, // Number of documents in current page
             currentPage, // Current page number
             totalPages, // Total number of pages
             doc,
         }
 
-        // Cache the result if not in cache
-        await redisClient.setEx(cacheKey, 3600, JSON.stringify(response))
+        await setCacheData(cacheKey, response)
+        // await redisClient.setEx(cacheKey, 3600, JSON.stringify(response))
 
         res.status(200).send(response)
     })

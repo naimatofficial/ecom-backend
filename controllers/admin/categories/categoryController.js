@@ -109,6 +109,14 @@ export const getCategories = getAll(Category, {
     ],
 })
 
+// export const getCategories = catchAsync(async (req, res, next) => {
+//     const doc = await Category.find()
+//         .populate('subCategories subSubCategories')
+//         .lean()
+
+//     res.status(200).json({ doc })
+// })
+
 export const getCategoryById = catchAsync(async (req, res, next) => {
     const categoryId = req.params.id
     const cacheKey = getCacheKey('Category', categoryId)

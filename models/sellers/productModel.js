@@ -180,13 +180,20 @@ const productSchema = new mongoose.Schema(
     },
     { timestamps: true }
 )
+// Combined text search for name, description, and slug
+productSchema.index({ name: 'text', description: 'text', slug: 'text' })
 
-productSchema.index({ name: 'text', description: 'text' }) // Text search
-productSchema.index({ slug: 'text' }) // Text search
-productSchema.index({ category: 1, subCategory: 1 }) // Category hierarchy
-productSchema.index({ price: 1 }) // Sorting by price
-productSchema.index({ isFeatured: 1, rating: -1 }) // Featured products sorted by rating
-productSchema.index({ tags: 1 }) // Tag-based search
+// Compound index for status, category, and price
+productSchema.index({ status: 1, category: 1, price: 1 })
+
+// Index for featured products sorted by rating and updatedAt
+productSchema.index({ isFeatured: 1, rating: -1, updatedAt: -1 })
+
+// Tag-based wildcard index
+productSchema.index({ 'tags.$**': 1 })
+
+// TTL index for expiring temporary products
+productSchema.index({ expiryDate: 1 }, { expireAfterSeconds: 0 })
 
 productSchema.pre('save', async function (next) {
     try {
@@ -234,8 +241,8 @@ productSchema.pre(/^find/, function (next) {
 const Product = DbConnection.model('Product', productSchema)
 
 // // Sync indexes
-// Product.syncIndexes()
-//     .then(() => console.log('Indexes are synced'))
-//     .catch((err) => console.error('Error syncing indexes:', err))
+Product.syncIndexes()
+    .then(() => console.log('Indexes are synced'))
+    .catch((err) => console.error('Error syncing indexes:', err))
 
 export default Product

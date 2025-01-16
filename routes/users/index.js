@@ -7,6 +7,7 @@ import reviewRoutes from './reviewRoutes.js'
 import whishlist from './wishlistRoutes.js'
 import otpRoutes from './otpRoutes.js'
 import cartRoutes from './cartRoutes.js'
+import innovationExportRoutes from './innovationExportRoutes.js'
 
 const router = express.Router()
 
@@ -17,6 +18,7 @@ router.use('/subscribers', subscriberRoutes)
 router.use('/search', searchRoutes)
 
 router.use('/reviews', reviewRoutes)
+router.use('/innovation-exports', innovationExportRoutes)
 router.use('/wishlists', whishlist)
 
 export default router
