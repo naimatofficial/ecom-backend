@@ -8,6 +8,7 @@ import AppError from './utils/appError.js'
 
 import { fileURLToPath } from 'url'
 import path, { dirname } from 'path'
+import geoip from 'geoip-lite'
 
 // ROUTES
 import routes from './routes/index.js'
@@ -51,11 +52,16 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.get('/', (req, res) => {
+    const ip = req.ip // Client IP
+    const geo = geoip.lookup(ip)
+    console.log({ ip, geo })
+
     res.status(200).json({
         status: 'success',
         message: '🛒 API is running successfully',
         timestamp: new Date().toISOString(),
         version: '1.0.0',
+        geo,
     })
 })
 

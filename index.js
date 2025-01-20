@@ -6,6 +6,7 @@ import keys from './config/keys.js'
 
 const port = keys.port || 3000
 
+
 // Schedule the task here
 cron.schedule('0 0 * * *', async () => {
     try {

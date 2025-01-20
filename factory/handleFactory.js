@@ -275,7 +275,7 @@ export const getAll = (Model, popOptions) =>
         }
 
         // Construct base query
-        let query = Model.find().lean()
+        let query = Model.find()
 
         // Conditionally apply population
         if (popOptions?.path) {

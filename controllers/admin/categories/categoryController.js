@@ -100,11 +100,11 @@ export const getCategories = getAll(Category, {
         'productCount',
         {
             path: 'subCategories',
-            select: '_id name slug',
+            select: '_id name slug logo',
         },
         {
             path: 'subSubCategories',
-            select: '_id name slug',
+            select: '_id name slug logo',
         },
     ],
 })
