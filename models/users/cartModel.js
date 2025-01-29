@@ -13,80 +13,80 @@ const cartSchema = new mongoose.Schema(
         },
         paymentMethod: {
             type: String,
-            enum: ['Credit Card', 'Debit Card', 'JazzCash', 'COD'],
+            // enum: ['Credit Card', 'Debit Card', 'JazzCash', 'COD'],
         },
         paymentStatus: {
             type: String,
             enum: ['Paid', 'Unpaid', 'Refunded'],
             default: 'Unpaid',
         },
-        orders: [
+        vendor: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Vendor',
+            required: [true, 'Vendor id is required.'],
+        },
+        cartItems: [
             {
-                vendor: {
+                product: {
                     type: mongoose.Schema.Types.ObjectId,
-                    ref: 'Vendor',
-                    required: [true, 'Vendor id is required.'],
+                    ref: 'Product',
+                    required: [true, 'product id is required.'],
                 },
-                cartItems: [
-                    {
-                        product: {
-                            type: mongoose.Schema.Types.ObjectId,
-                            ref: 'Product',
-                            required: [true, 'product id is required.'],
-                        },
-                        qty: {
-                            type: Number,
-                            required: true,
-                            min: [1, 'Quantity must be at least 1.'],
-                        },
-                        price: {
-                            type: Number,
-                            required: [true, 'Product price is required.'],
-                        },
-                        discount: {
-                            type: Number,
-                            default: 0,
-                        },
-                        tax: {
-                            type: Number,
-                            default: 0,
-                        },
-                    },
-                ],
-                totalQty: {
+                qty: {
                     type: Number,
-                    required: [true, 'Total quantity is required.'],
-                    default: 0,
+                    required: true,
+                    // min: [1, 'Quantity must be at least 1.'],
                 },
-                subTotalAmount: {
+                price: {
                     type: Number,
-                    required: [true, 'Sub total amount is required.'],
-                    default: 0,
+                    required: [true, 'Product price is required.'],
                 },
-                totalTaxAmount: {
+                discount: {
                     type: Number,
                     default: 0,
                 },
-                totalWeight: {
+                weight: {
                     type: Number,
                     default: 0,
                 },
-                totalDiscountAmount: {
-                    type: Number,
-                    required: [true, 'Total discount amount is required.'],
-                    default: 0,
-                },
-                totalAmount: {
-                    type: Number,
-                    required: [true, 'Total amount is required.'],
-                    default: 0,
-                },
-                totalShippingCost: {
+                tax: {
                     type: Number,
                     default: 0,
                 },
             },
         ],
+        totalQty: {
+            type: Number,
+            required: [true, 'Total quantity is required.'],
+            default: 0,
+        },
+        subTotalAmount: {
+            type: Number,
+            required: [true, 'Sub total amount is required.'],
+            default: 0,
+        },
+        totalTaxAmount: {
+            type: Number,
+            default: 0,
+        },
+        totalWeight: {
+            type: Number,
+            default: 0,
+        },
+        totalDiscountAmount: {
+            type: Number,
+            required: [true, 'Total discount amount is required.'],
+            default: 0,
+        },
+        totalAmount: {
+            type: Number,
+            required: [true, 'Total amount is required.'],
+            default: 0,
+        },
+        // totalShippingCost: {
+        //     type: Number,
+        //     default: 0,
+        // },
     },
     {
         timestamps: true,
